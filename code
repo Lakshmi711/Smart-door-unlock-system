@@ -1,0 +1,47 @@
+#include <Servo.h>
+Servo servoMotor; 
+int ir = 2;      
+int irv;   
+int led = 5;  
+int tri = 1;   
+int echo = 0;      
+long dur;           
+int distance;         
+
+void setup() {
+  pinMode(ir, INPUT);
+  pinMode(led, OUTPUT);
+  pinMode(tri, OUTPUT);
+  pinMode(echo, INPUT);
+  servoMotor.attach(9); 
+  servoMotor.write(0);
+  Serial.begin(9600);
+}
+
+void loop() {
+  irv = digitalRead(ir); 
+  
+  if (irv == 1) {
+    digitalWrite(led, HIGH);  
+    servoMotor.write(90); 
+    delay(1000);
+  }
+  else {
+    digitalWrite(led, LOW); 
+    servoMotor.write(0);      
+    delay(1000);
+  }
+
+  digitalWrite(tri, LOW);
+  delayMicroseconds(2);
+  digitalWrite(tri, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(tri, LOW);
+
+  dur = pulseIn(echo, HIGH);  
+  distance = dur * 0.034 / 2;   
+  Serial.print("Distance: ");
+  Serial.println(distance);
+
+  delay(1000);
+}
